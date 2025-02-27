@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query, Body } from '@nestjs/common';
 
 // localhost:3000/products
 @Controller('products')
@@ -11,8 +11,8 @@ export class ProductsController {
 
   // localhost:3000/products/p01
   @Get(':productId')
-  getProduct(@Param('productId') productId: string): string {
-    return `Product ID: ${productId}`;
+  getProduct(@Param('productId') productId: string) {
+    return { productId }; // Respuesta en formato JSON
   }
 
   // localhost:3000/products?limit=100&offset=40&brand=webos
@@ -21,7 +21,22 @@ export class ProductsController {
     @Query('limit') limit: number = 100,
     @Query('offset') offset: number = 0,
     @Query('brand') brand: string = 'default',
-  ): string {
-    return `Products - limit: ${limit}, offset: ${offset}, brand: ${brand}`;
+  ) {
+    // Respuesta en formato JSON
+    return {
+      limit,
+      offset,
+      brand,
+    };
+  }
+
+  // localhost:3000/products (POST)
+  @Post()
+  create(@Body() payload: any) {
+    // Respuesta en formato JSON
+    return {
+      message: 'Create action',
+      payload
+    };
   }
 }

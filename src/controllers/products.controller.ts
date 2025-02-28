@@ -7,31 +7,45 @@ import {
   Body,
   Put,
   Delete,
+  HttpStatus,
+  HttpCode,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 
-// localhost:3000/products
 @Controller('products')
 export class ProductsController {
-  // localhost:3000/products/filter (Las rutas no dinámicas van primero!!)
   @Get('filter')
   getProductFilter(): string {
     return `Product filter`;
   }
 
-  // localhost:3000/products/p01
   @Get(':productId')
+  @HttpCode(HttpStatus.ACCEPTED)
   getProduct(@Param('productId') productId: string) {
-    return { productId }; // Respuesta en formato JSON
+    return {
+      message: `Product ${productId}`,
+    };
   }
 
-  // localhost:3000/products?limit=100&offset=40&brand=webos
+  // Usando Response de express
+  @Get('express/:productId')
+  @HttpCode(HttpStatus.ACCEPTED) // 202
+  getProductExpress(
+    @Res() response: Response,
+    @Param('productId') productId: string,
+  ) {
+    response.status(HttpStatus.OK).send({
+      message: `Product ${productId} (Response Express)`,
+    });
+  }
+
   @Get('')
   getProducts(
     @Query('limit') limit: number = 100,
     @Query('offset') offset: number = 0,
     @Query('brand') brand: string = 'default',
   ) {
-    // Respuesta en formato JSON
     return {
       limit,
       offset,
@@ -39,17 +53,14 @@ export class ProductsController {
     };
   }
 
-  // localhost:3000/products (POST)
   @Post()
   create(@Body() payload: any) {
-    // Respuesta en formato JSON
     return {
       message: 'Create action',
       payload,
     };
   }
 
-  // localhost:3000/products/p01 (PUT)
   @Put(':id')
   update(@Param('id') id: number, @Body() payload: any) {
     return {
@@ -58,7 +69,6 @@ export class ProductsController {
     };
   }
 
-  // localhost:3000/products/p01 (DELETE)
   @Delete(':id')
   delete(@Param('id') id: number) {
     return {

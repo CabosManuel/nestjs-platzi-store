@@ -25,7 +25,7 @@ export class ProductsService {
     return this.products.find((item) => item.id === id);
   }
 
-  create(payload: any) {
+  create(payload: Omit<Product, 'id'>) {
     const newProduct = {
       id: this.counterId++,
       ...payload,
@@ -35,10 +35,10 @@ export class ProductsService {
     return newProduct;
   }
 
-  update(id: number, payload: Partial<Product>): Product {
+  update(id: number, payload: Partial<Product>) {
     const product = this.findOne(id);
     if (!product) {
-      throw new Error('Product not found');
+      return { message: 'Product not found' };
     }
     const index = this.products.findIndex((p) => p.id === id);
     this.products[index] = { ...product, ...payload };

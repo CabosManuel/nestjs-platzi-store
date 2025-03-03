@@ -10,11 +10,16 @@ import {
   HttpStatus,
   HttpCode,
   Res,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { ProductsService } from '../services/products.service';
+import { Product } from 'src/entities/product.entity';
 
 @Controller('products')
 export class ProductsController {
+  constructor(private productService: ProductsService) {}
+
   @Get('filter')
   getProductFilter(): string {
     return `Product filter`;
@@ -23,9 +28,7 @@ export class ProductsController {
   @Get(':productId')
   @HttpCode(HttpStatus.ACCEPTED)
   getProduct(@Param('productId') productId: string) {
-    return {
-      message: `Product ${productId}`,
-    };
+    return this.productService.findOne(+productId); // Agrega un + para convertir a number
   }
 
   // Usando Response de express
@@ -35,44 +38,30 @@ export class ProductsController {
     @Res() response: Response,
     @Param('productId') productId: string,
   ) {
-    response.status(HttpStatus.OK).send({
-      message: `Product ${productId} (Response Express)`,
-    });
+    // Si no se utiliza Response el request se queda esperando
+    return this.productService.findOne(+productId);
   }
 
   @Get('')
-  getProducts(
-    @Query('limit') limit: number = 100,
-    @Query('offset') offset: number = 0,
-    @Query('brand') brand: string = 'default',
-  ) {
-    return {
-      limit,
-      offset,
-      brand,
-    };
+  getProducts(): Product[] {
+    return this.productService.findAll();
   }
 
   @Post()
-  create(@Body() payload: any) {
-    return {
-      message: 'Create action',
-      payload,
-    };
+  create(@Body() payload: Omit<Product, 'id'>): Product {
+    return this.productService.create(payload);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() payload: any) {
-    return {
-      id,
-      payload,
-    };
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: Omit<Product, 'id'>,
+  ) {
+    return this.productService.update(id, payload);
   }
 
   @Delete(':id')
   delete(@Param('id') id: number) {
-    return {
-      id,
-    };
+    return this.productService.delete(id);
   }
 }

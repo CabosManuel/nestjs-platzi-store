@@ -26,8 +26,8 @@ export class ProductsController {
 
   @Get(':productId')
   @HttpCode(HttpStatus.OK)
-  getProduct(@Param('productId') productId: string) {
-    return this.productService.findOne(+productId); // Agrega un + para convertir a number
+  getProduct(@Param('productId', ParseIntPipe) productId: number) {
+    return this.productService.findOne(productId); // Agrega un + para convertir a number
   }
 
   // Usando Response de express
@@ -35,10 +35,10 @@ export class ProductsController {
   @HttpCode(HttpStatus.ACCEPTED) // 202
   getProductExpress(
     @Res() response: Response,
-    @Param('productId') productId: string,
+    @Param('productId', ParseIntPipe) productId: number,
   ) {
     // Si no se utiliza Response el request se queda esperando
-    return this.productService.findOne(+productId);
+    return this.productService.findOne(productId);
   }
 
   @Get('')
@@ -53,11 +53,11 @@ export class ProductsController {
 
   @Put(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body() payload: Product) {
-    return this.productService.update(+id, payload);
+    return this.productService.update(id, payload);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: number) {
-    return this.productService.delete(+id);
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.productService.delete(id);
   }
 }

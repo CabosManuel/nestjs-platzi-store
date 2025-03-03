@@ -3,7 +3,6 @@ import {
   Get,
   Param,
   Post,
-  Query,
   Body,
   Put,
   Delete,
@@ -26,7 +25,7 @@ export class ProductsController {
   }
 
   @Get(':productId')
-  @HttpCode(HttpStatus.ACCEPTED)
+  @HttpCode(HttpStatus.OK)
   getProduct(@Param('productId') productId: string) {
     return this.productService.findOne(+productId); // Agrega un + para convertir a number
   }
@@ -53,15 +52,12 @@ export class ProductsController {
   }
 
   @Put(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() payload: Omit<Product, 'id'>,
-  ) {
-    return this.productService.update(id, payload);
+  update(@Param('id', ParseIntPipe) id: number, @Body() payload: Product) {
+    return this.productService.update(+id, payload);
   }
 
   @Delete(':id')
   delete(@Param('id') id: number) {
-    return this.productService.delete(id);
+    return this.productService.delete(+id);
   }
 }

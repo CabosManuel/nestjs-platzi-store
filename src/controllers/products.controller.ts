@@ -9,11 +9,12 @@ import {
   HttpStatus,
   HttpCode,
   Res,
-  ParseIntPipe,
+  // ParseIntPipe,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ProductsService } from '../services/products.service';
 import { Product } from 'src/entities/product.entity';
+import { ParseIntPipe } from 'src/common/parse-int.pipe';
 
 @Controller('products')
 export class ProductsController {
@@ -27,7 +28,7 @@ export class ProductsController {
   @Get(':productId')
   @HttpCode(HttpStatus.OK)
   getProduct(@Param('productId', ParseIntPipe) productId: number) {
-    return this.productService.findOne(productId); // Agrega un + para convertir a number
+    return this.productService.findOne(productId);
   }
 
   // Usando Response de express

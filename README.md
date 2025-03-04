@@ -1,3 +1,9 @@
+[![wakatime](https://wakatime.com/badge/user/9e0548e0-ba44-4650-b0f1-5ece84453209/project/ac1c25bd-82f1-43d5-84a0-2be423b14890.svg)](https://wakatime.com/badge/user/9e0548e0-ba44-4650-b0f1-5ece84453209/project/ac1c25bd-82f1-43d5-84a0-2be423b14890)
+
+# 📗 Curso de Backend con NestJS
+- 👨‍🎓 Certificate: [platzi/CabosManuel](https://platzi.com/p/CabosManuel/curso/2272-nestjs/diploma/detalle/)
+---
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
